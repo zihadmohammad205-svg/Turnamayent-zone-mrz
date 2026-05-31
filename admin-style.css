@@ -1,0 +1,109 @@
+* {
+    margin: 0; padding: 0; box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body.dark-mode {
+    background-color: #0b0c10; color: #c5c6c7; padding-bottom: 30px;
+}
+
+/* প্রফেশনাল এডমিন হেডার */
+.admin-header {
+    background: #1f2833; padding: 15px 20px; border-bottom: 3px solid #45f3ff;
+    position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+}
+.header-container {
+    max-width: 800px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center;
+}
+.admin-header h2 { color: #fff; font-size: 19px; display: flex; align-items: center; gap: 8px; }
+.admin-header h2 i { color: #45f3ff; }
+.admin-header span { background: #3a3f47; color: #45f3ff; font-size: 11px; padding: 4px 10px; border-radius: 20px; font-weight: bold; }
+
+.admin-container {
+    width: 100%; max-width: 500px; margin: 20px auto; padding: 0 15px;
+}
+
+/* ২ টি সিরিয়ালের (Two Column Grid) ম্যাজিক ড্যাশবোর্ড */
+.admin-grid {
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px;
+}
+
+.admin-card {
+    background: #1f2833; padding: 20px 15px; border-radius: 12px; border: 1px solid #2b3542;
+    text-align: center; cursor: pointer; transition: transform 0.2s, border-color 0.2s;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+}
+.admin-card:hover {
+    transform: translateY(-3px); border-color: #45f3ff;
+}
+.card-icon {
+    font-size: 28px; color: #45f3ff; margin-bottom: 12px;
+}
+.admin-card h3 { color: #fff; font-size: 14px; margin-bottom: 5px; }
+.admin-card p { color: #888; font-size: 10px; line-height: 1.3; }
+
+/* পপ-আপ কন্ট্রোল সিস্টেম */
+.modal {
+    display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.85); z-index: 200; align-items: center; justify-content: center;
+}
+.modal.active { display: flex; }
+.modal-content {
+    background: #1f2833; padding: 22px; border-radius: 14px; width: 92%;
+    max-width: 420px; position: relative; max-height: 90vh; display: flex; flex-direction: column;
+}
+.close-modal { position: absolute; top: 12px; right: 18px; font-size: 26px; color: #888; cursor: pointer; }
+.close-modal:hover { color: #fff; }
+
+.modal h3 { color: #fff; font-size: 16px; margin-bottom: 15px; display: flex; align-items: center; gap: 8px;}
+.modal h3 i { color: #45f3ff; }
+
+/* ফর্ম ও ইনপুট এলিমেন্ট */
+.form-group { margin-bottom: 12px; width: 100%; }
+.form-group label { display: block; font-size: 12px; color: #aaa; margin-bottom: 4px; font-weight: 500;}
+.modal input, .modal select, .modal textarea {
+    width: 100%; background: #0b0c10; border: 1px solid #333; padding: 11px;
+    color: #fff; border-radius: 6px; outline: none; font-size: 14px;
+}
+.modal textarea { height: 100px; resize: none; line-height: 1.5; }
+.modal input:focus, .modal select:focus, .modal textarea:focus { border-color: #45f3ff; }
+
+.modal-scroll-area { overflow-y: auto; padding-right: 5px; }
+
+.btn-submit {
+    background: #e50914; color: white; border: none; padding: 12px; margin-top: 8px;
+    width: 100%; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 14px;
+}
+.btn-submit:hover { background: #ff121e; }
+
+/* ডিপোজিট ও উইথড্র রিকোয়েস্ট লিস্ট স্টাইলিং */
+.list-modal { max-width: 450px; }
+.request-list-container { overflow-y: auto; margin-top: 5px; max-height: 60vh; }
+.no-data { text-align: center; padding: 30px 0; color: #666; font-size: 13px; }
+
+.req-card {
+    background: #0b0c10; padding: 12px; border-radius: 8px; margin-bottom: 10px;
+    border-left: 4px solid #ffc107; font-size: 12px;
+}
+.req-row { display: flex; justify-content: space-between; margin-bottom: 4px; }
+.req-row span { color: #aaa; }
+.req-row strong { color: #fff; }
+.req-actions { display: flex; gap: 8px; margin-top: 10px; }
+.req-actions button {
+    flex: 1; padding: 6px; border: none; border-radius: 4px; font-weight: bold; font-size: 11px; cursor: pointer;
+}
+.btn-accept { background: #2ecc71; color: #0b0c10; }
+.btn-reject { background: #e74c3c; color: #fff; }
+
+/* ৩-সেকেন্ডের অ্যানিমেটেড বটম টোস্ট নোটিফিকেশন */
+.toast {
+    position: fixed; bottom: -80px; left: 50%; transform: translateX(-50%);
+    width: 90%; max-width: 400px; background: #1f2833; color: #fff;
+    padding: 15px 20px; border-radius: 10px; box-shadow: 0 5px 20px rgba(0,0,0,0.6);
+    z-index: 999; display: flex; align-items: center; gap: 12px;
+    border-left: 5px solid #45f3ff; transition: bottom 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+}
+.toast.show { bottom: 25px; }
+.toast i { font-size: 20px; color: #45f3ff; }
+.toast.success { border-left-color: #2ecc71; }
+.toast.success i { color: #2ecc71; }
