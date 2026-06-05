@@ -10,9 +10,11 @@
 <body class="dark-mode">
 
     <header class="admin-header">
-        <div class="header-container">
+        <div class="header-container" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
             <h2><i class="fa-solid fa-screwdriver-wrench"></i> Tournament Zone</h2>
-            <span>Admin Control Panel</span>
+            <span id="header-total-users" style="background: #1f2833; padding: 6px 12px; border-radius: 20px; border: 1px solid #45f3ff; color: #45f3ff; font-weight: bold; font-size: 13px;">
+                <i class="fa-solid fa-users"></i> লোড হচ্ছে...
+            </span>
         </div>
     </header>
 
@@ -37,28 +39,36 @@
                 <p>১৬:৯ থাম্বনেইল সহ ম্যাচ বানান</p>
             </div>
 
-            <div class="admin-card" onclick="openModal('mode-modal')">
-                <i class="fa-solid fa-gamepad card-icon"></i>
-                <h3>গেম মোড কন্ট্রোল</h3>
-                <p>ফ্রি ফায়ার, পাবজি মোড সেটআপ</p>
+            <div class="admin-card" onclick="openModal('all-matches-modal')">
+                <i class="fa-solid fa-rectangle-list card-icon" style="color: #ff9f43;"></i>
+                <h3 style="color: #ff9f43;">ম্যাচ লিস্ট ও রুম</h3>
+                <p>সব ম্যাচ, রুম আইডি ও ডিলিট কন্ট্রোল</p>
             </div>
 
-            <div class="admin-card" onclick="openModal('deposit-requests-modal')">
+            <div class="admin-card" onclick="openModal('category-manager-modal')">
+                <i class="fa-solid fa-gamepad card-icon" style="color: #45f3ff;"></i>
+                <h3>ক্যাটাগরি কন্ট্রোল</h3>
+                <p>নতুন ক্যাটাগরি ও লাইভ লিস্ট ভিউ</p>
+            </div>
+
+            <div class="admin-card" onclick="openModal('send-notification-modal')" style="border-color: #9b59b6;">
+                <i class="fa-solid fa-bell card-icon" style="color: #9b59b6;"></i>
+                <h3 style="color: #9b59b6;">নোটিফিকেশন পাঠান</h3>
+                <p>ইউজার অ্যাপের ভেতরে ইন-অ্যাপ এলার্ট পাঠান</p>
+            </div>
+
+            <div class="admin-card badge-container" onclick="openModal('deposit-requests-modal')">
+                <span id="deposit-badge" class="notification-badge"></span>
                 <i class="fa-solid fa-wallet card-icon"></i>
                 <h3>ডিপোজিট রিকোয়েস্ট</h3>
                 <p>টাকা জমার রিকোয়েস্ট লিস্ট</p>
             </div>
 
-            <div class="admin-card" onclick="openModal('withdraw-requests-modal')">
+            <div class="admin-card badge-container" onclick="openModal('withdraw-requests-modal')">
+                <span id="withdraw-badge" class="notification-badge"></span>
                 <i class="fa-solid fa-money-bill-transfer card-icon"></i>
                 <h3>উইথড্র রিকোয়েস্ট</h3>
                 <p>টাকা তোলার রিকোয়েস্ট লিস্ট</p>
-            </div>
-
-            <div class="admin-card" onclick="openModal('room-modal')">
-                <i class="fa-solid fa-key card-icon"></i>
-                <h3>রুম আইডি ও পাসওয়ার্ড</h3>
-                <p>ম্যাচের কাস্টম রুম ডিটেইলস দিন</p>
             </div>
 
             <div class="admin-card" onclick="openModal('banner-modal')">
@@ -67,8 +77,158 @@
                 <p>হোম স্ক্রিনের মেইন ব্যানার ইমেজ</p>
             </div>
 
+            <div class="admin-card" onclick="openModal('user-manager-modal')" style="border-color: #2ecc71;">
+                <i class="fa-solid fa-users card-icon" style="color: #2ecc71;"></i>
+                <h3 style="color: #2ecc71;">ইউজার লিস্ট</h3>
+                <p>সব রেজিস্টার্ড ইউজার ও তাদের ব্যালেন্স দেখুন</p>
+            </div>
+
+            <div class="admin-card badge-container" onclick="openModal('admin-chat-modal')" style="border-color: #e74c3c;">
+                <span id="chat-badge" class="notification-badge"></span>
+                <i class="fa-solid fa-comments card-icon" style="color: #e74c3c;"></i>
+                <h3 style="color: #e74c3c;">চ্যাট ইনবক্স</h3>
+                <p>ইউজারদের লাইভ কাস্টমার সাপোর্ট দিন</p>
+            </div>
+
         </div>
     </main>
+
+    <div id="send-notification-modal" class="modal">
+        <div class="modal-content" style="max-height: 85vh; display: flex; flex-direction: column;">
+            <span class="close-modal" onclick="closeModal('send-notification-modal')">&times;</span>
+            <h3><i class="fa-solid fa-paper-plane" style="color: #9b59b6;"></i> ইন-অ্যাপ নোটিফিকেশন ব্রডকাস্ট</h3>
+            
+            <div style="flex: 1; overflow-y: auto; padding-right: 5px;">
+                <div class="form-group">
+                    <label>নোটিফিকেশন টাইটেল / শিরোনাম:</label>
+                    <input type="text" id="noti-title" placeholder="যেমন: নতুন ধামাকা অফার!">
+                </div>
+                <div class="form-group">
+                    <label>নোটিফিকেশন মেসেজ / মূল বার্তা:</label>
+                    <textarea id="noti-message" style="height: 80px; resize: vertical;" placeholder="ইউজারদের কি জানাতে চান তা এখানে বিস্তারিত লিখুন..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label>কতক্ষণ পর অটোমেটিক ডিলিট হবে?</label>
+                    <select id="admin-noti-expiry" style="width: 100%; padding: 10px; background: #1f2833; border: 1px solid #2b3542; color: #fff; border-radius: 6px; cursor: pointer; outline: none;">
+                        <option value="24">২৪ ঘণ্টা পর (১ দিন)</option>
+                        <option value="48">৪৮ ঘণ্টা পর (২ দিন)</option>
+                    </select>
+                </div>
+
+                <button class="btn-submit" id="btn-send-global-notification" style="background: #9b59b6; color: #fff; width: 100%; margin-bottom: 20px;">
+                    <i class="fa-solid fa-share-from-square"></i> Send Notification Live
+                </button>
+
+                <hr style="border: 0; border-top: 1px solid #2b3542; margin-bottom: 15px;">
+
+                <h4 style="color: #ff9f43; margin-top: 0; font-size: 14px;"><i class="fa-solid fa-list"></i> একটিভ নোটিফিকেশন সমূহ (ম্যানেজমেন্ট)</h4>
+                <div id="admin-noti-list-container" class="request-list-container" style="background: #0b0c10; padding: 10px; border-radius: 6px; border: 1px solid #2b3542;">
+                    <p style="color: #666; text-align: center; font-size: 12px; margin: 10px 0;">নোটিফিকেশন লিস্ট লোড হচ্ছে...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="user-manager-modal" class="modal">
+        <div class="modal-content match-list-large-modal" style="display: flex; flex-direction: column; max-height: 85vh;">
+            <span class="close-modal" onclick="closeModal('user-manager-modal')">&times;</span>
+            <h3><i class="fa-solid fa-users-gear"></i> রেজিস্টার্ড ইউজার তালিকা</h3>
+            
+            <div style="position: relative; margin-bottom: 15px;">
+                <i class="fa-solid fa-magnifying-glass" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #45f3ff;"></i>
+                <input type="text" id="admin-user-search-input" oninput="filterUsersList()" placeholder="UID অথবা মোবাইল নাম্বার দিয়ে সার্চ করুন..." style="width: 100%; padding: 10px 10px 10px 38px; background: #1f2833; border: 1px solid #2b3542; color: #fff; border-radius: 6px; font-size: 14px; outline: none; box-sizing: border-box;">
+            </div>
+
+            <div style="background: #0b0c10; padding: 10px; border-radius: 6px; text-align: center; margin-bottom: 15px; border: 1px solid #2b3542;">
+                <span style="font-size: 13px; color: #45f3ff; font-weight: bold;">
+                    <i class="fa-solid fa-user-check"></i> সর্বমোট ইউজার: <span id="total-users-count">০</span> জন
+                </span>
+            </div>
+
+            <div class="request-list-container" id="admin-user-list-area" style="flex: 1; overflow-y: auto; padding-right: 5px;">
+                <p class="no-data">ইউজার লিস্ট লোড হচ্ছে...</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="category-manager-modal" class="modal">
+        <div class="modal-content" style="position: relative; padding-top: 40px;">
+            <span class="close-modal" onclick="closeModal('category-manager-modal')" style="position: absolute; top: 15px; right: 20px; z-index: 10; font-size: 28px; cursor: pointer;">&times;</span>
+            
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-right: 40px;">
+                <h3 style="margin: 0;"><i class="fa-solid fa-folder-open"></i> গেম ক্যাটাগরি সমূহ</h3>
+                <i class="fa-solid fa-circle-plus" id="toggle-cat-form-btn" style="font-size: 26px; color: #2ecc71; cursor: pointer; padding: 5px;" onclick="toggleCategoryForm()"></i>
+            </div>
+
+            <div id="add-category-form-area" style="display: none; background: #0b0c10; padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #333;">
+                <h4 class="section-title" style="margin-top:0; color:#2ecc71;"><i class="fa-solid fa-plus"></i> নতুন ক্যাটাগরি তথ্য</h4>
+                <div class="form-group">
+                    <label>ক্যাটাগরির নাম (যেমন: Free Fire, PUBG):</label>
+                    <input type="text" id="new-cat-name" placeholder="নাম লিখুন">
+                </div>
+                <div class="form-group">
+                    <label>ক্যাটাগরি ইমেজ ইউআরএল (Image URL):</label>
+                    <input type="text" id="new-cat-img" placeholder="https://example.com/image.png">
+                </div>
+                <button class="btn-submit" id="btn-save-new-category" style="background: #2ecc71; color: #0b0c10; padding: 10px; font-weight: bold;">ক্যাটাগরি সেভ করুন</button>
+            </div>
+
+            <h4 class="section-title"><i class="fa-solid fa-list-ul"></i> বর্তমান ক্যাটাগরি তালিকা</h4>
+            <div class="request-list-container" id="live-categories-list-area" style="max-height: 45vh; overflow-y: auto;">
+                <p class="no-data">ক্যাটাগরি লোড হচ্ছে...</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="all-matches-modal" class="modal">
+        <div class="modal-content match-list-large-modal">
+            <span class="close-modal" onclick="closeModal('all-matches-modal')">&times;</span>
+            <h3><i class="fa-solid fa-trophy"></i> রানিং ম্যাচ সমূহের তালিকা</h3>
+            <div class="request-list-container" id="admin-match-list">
+                <p class="no-data">ম্যাচ লোড হচ্ছে...</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="winner-management-modal" class="modal">
+        <div class="modal-content winner-modal-large">
+            <span class="close-modal" onclick="closeModal('winner-management-modal')">&times;</span>
+            <h3><i class="fa-solid fa-award"></i> উইনার ও জয়েন লিস্ট কন্ট্রোল</h3>
+            <div class="modal-scroll-area">
+                
+                <h4 class="section-title"><i class="fa-solid fa-users"></i> জয়েন করা প্লেয়ারদের তালিকা (ক্লিক করলে স্কোয়াড দেখা যাবে)</h4>
+                <div id="winner-joined-users-list" class="joined-users-box-container"></div>
+
+                <hr class="divider-line">
+
+                <h4 class="section-title"><i class="fa-solid fa-gift"></i> প্রাইজ এবং পজিশন বন্টন প্যানেল</h4>
+                <div class="form-group">
+                    <label>ম্যাচের মেইন উইন প্রাইজ (এডিটেবল):</label>
+                    <input type="number" id="win-prize-distribute" placeholder="টাকার পরিমাণ">
+                </div>
+
+                <div class="position-select-grid">
+                    <div class="form-group">
+                        <label><i class="fa-solid fa-medal" style="color:#ffd700;"></i> 1st Place:</label>
+                        <select id="select-1st-place"><option value="">সিলেক্ট করুন...</option></select>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fa-solid fa-medal" style="color:#c0c0c0;"></i> 2nd Place:</label>
+                        <select id="select-2nd-place"><option value="">সিলেক্ট করুন...</option></select>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fa-solid fa-medal" style="color:#cd7f32;"></i> 3rd Place:</label>
+                        <select id="select-3rd-place"><option value="">সিলেক্ট করুন...</option></select>
+                    </div>
+                </div>
+
+                <button class="btn-submit" id="btn-confirm-prize-distribution" style="background:#2ecc71; color:#0b0c10;">
+                    <i class="fa-solid fa-paper-plane"></i> Confirm & Distribute Prize
+                </button>
+            </div>
+        </div>
+    </div>
 
     <div id="notice-modal" class="modal">
         <div class="modal-content">
@@ -83,18 +243,9 @@
         <div class="modal-content">
             <span class="close-modal" onclick="closeModal('payment-modal')">&times;</span>
             <h3><i class="fa-solid fa-credit-card"></i> পেমেন্ট নাম্বার আপডেট</h3>
-            <div class="form-group">
-                <label>বিকাশ নাম্বার (Send Money):</label>
-                <input type="text" id="input-bkash" placeholder="বিকাশ নাম্বার দিন">
-            </div>
-            <div class="form-group">
-                <label>নগদ নাম্বার (Send Money):</label>
-                <input type="text" id="input-nagad" placeholder="নগদ নাম্বার দিন">
-            </div>
-            <div class="form-group">
-                <label>রকেট নাম্বার (Send Money):</label>
-                <input type="text" id="input-rocket" placeholder="রকেট নাম্বার দিন">
-            </div>
+            <div class="form-group"><label>বিকাশ নাম্বার:</label><input type="text" id="input-bkash"></div>
+            <div class="form-group"><label>নগদ নাম্বার:</label><input type="text" id="input-nagad"></div>
+            <div class="form-group"><label>রকেট নাম্বার:</label><input type="text" id="input-rocket"></div>
             <button class="btn-submit" id="btn-update-numbers">Save Numbers</button>
         </div>
     </div>
@@ -104,25 +255,21 @@
             <span class="close-modal" onclick="closeModal('match-modal')">&times;</span>
             <h3><i class="fa-solid fa-square-plus"></i> নতুন ম্যাচ তৈরি করুন</h3>
             <div class="modal-scroll-area">
-                <div class="form-group"><label>ম্যাচের নাম (Title):</label><input type="text" id="m-title" placeholder="যেমন: Squad War #01"></div>
+                <div class="form-group">
+                    <label>গেমের ক্যাটাগরি (Category):</label>
+                    <select id="m-category">
+                        <option value="">ক্যাটাগরি সিলেক্ট করুন...</option>
+                    </select>
+                </div>
+                <div class="form-group"><label>ম্যাচের নাম (Title):</label><input type="text" id="m-title"></div>
                 <div class="form-group"><label>তারিখ ও সময় (Date & Time):</label><input type="text" id="m-datetime" placeholder="যেমন: 31 May - 09:00 PM"></div>
-                <div class="form-group"><label>মোট প্রাইজমানি (Win Prize):</label><input type="number" id="m-prize" placeholder="টাকার পরিমাণ"></div>
-                <div class="form-group"><label>এন্ট্রি ফি (Entry Fee - Per Person):</label><input type="number" id="m-fee" placeholder="টাকার পরিমাণ"></div>
-                <div class="form-group"><label>মোট সিট সংখ্যা (Total Seats):</label><input type="number" id="m-seats" value="50"></div>
-                <div class="form-group"><label>১৬:৯ থাম্বনেইল লিংক (Thumbnail URL):</label><input type="text" id="m-thumb" placeholder="https://..."></div>
-                <div class="form-group"><label>গেমের লোগো লিংক (Logo URL):</label><input type="text" id="m-logo" placeholder="https://..."></div>
+                <div class="form-group"><label>মোট প্রাইজমানি (Win Prize):</label><input type="number" id="m-prize"></div>
+                <div class="form-group"><label>এন্ট্রি ফি (Entry Fee):</label><input type="number" id="m-fee"></div>
+                <div class="form-group"><label>মোট সিট সংখ্যা:</label><input type="number" id="m-seats" value="50"></div>
+                <div class="form-group"><label>১৬:৯ থাম্বনেইল লিংক (URL):</label><input type="text" id="m-thumb"></div>
+                <div class="form-group"><label>গেমের লোগো লিংক (URL):</label><input type="text" id="m-logo"></div>
                 <button class="btn-submit" id="btn-create-match">Publish Match</button>
             </div>
-        </div>
-    </div>
-
-    <div id="mode-modal" class="modal">
-        <div class="modal-content">
-            <span class="close-modal" onclick="closeModal('mode-modal')">&times;</span>
-            <h3><i class="fa-solid fa-gamepad"></i> নতুন গেম মোড যোগ করুন</h3>
-            <div class="form-group"><label>মোডের নাম:</label><input type="text" id="mode-name" placeholder="যেমন: Free Fire"></div>
-            <div class="form-group"><label>আইকন/ইমেজ লিংক (URL):</label><input type="text" id="mode-img" placeholder="https://..."></div>
-            <button class="btn-submit" id="btn-add-mode">Add Game Mode</button>
         </div>
     </div>
 
@@ -130,9 +277,7 @@
         <div class="modal-content list-modal">
             <span class="close-modal" onclick="closeModal('deposit-requests-modal')">&times;</span>
             <h3><i class="fa-solid fa-wallet"></i> ডিপোজিট রিকোয়েস্ট সমূহ</h3>
-            <div class="request-list-container" id="deposit-list-area">
-                <p class="no-data">কোনো পেন্ডিং ডিপোজিট রিকোয়েস্ট নেই।</p>
-            </div>
+            <div class="request-list-container" id="deposit-list-area"></div>
         </div>
     </div>
 
@@ -140,23 +285,7 @@
         <div class="modal-content list-modal">
             <span class="close-modal" onclick="closeModal('withdraw-requests-modal')">&times;</span>
             <h3><i class="fa-solid fa-money-bill-transfer"></i> উইথড্র রিকোয়েস্ট সমূহ</h3>
-            <div class="request-list-container" id="withdraw-list-area">
-                <p class="no-data">কোনো পেন্ডিং উইথড্র রিকোয়েস্ট নেই।</p>
-            </div>
-        </div>
-    </div>
-
-    <div id="room-modal" class="modal">
-        <div class="modal-content">
-            <span class="close-modal" onclick="closeModal('room-modal')">&times;</span>
-            <h3><i class="fa-solid fa-key"></i> রুম ডিটেইলস আপলোড করুন</h3>
-            <div class="form-group">
-                <label>ম্যাচ সিলেক্ট করুন:</label>
-                <select id="room-match-select"><option value="">ম্যাচ লোড হচ্ছে...</option></select>
-            </div>
-            <div class="form-group"><label>রুম আইডি (Room ID):</label><input type="text" id="room-id" placeholder="Enter Room ID"></div>
-            <div class="form-group"><label>রুম পাসওয়ার্ড (Password):</label><input type="text" id="room-pass" placeholder="Enter Room Password"></div>
-            <button class="btn-submit" id="btn-update-room">Set Room Info</button>
+            <div class="request-list-container" id="withdraw-list-area"></div>
         </div>
     </div>
 
@@ -164,8 +293,36 @@
         <div class="modal-content">
             <span class="close-modal" onclick="closeModal('banner-modal')">&times;</span>
             <h3><i class="fa-solid fa-image"></i> হোম ব্যানার চেঞ্জার</h3>
-            <div class="form-group"><label>ব্যানার ইমেজ লিংক (Image URL):</label><input type="text" id="input-banner-url" placeholder="https://..."></div>
+            <div class="form-group"><label>ব্যানার ইমেজ লিংক:</label><input type="text" id="input-banner-url"></div>
             <button class="btn-submit" id="btn-update-banner">Update Banner</button>
+        </div>
+    </div>
+
+    <!-- চ্যাট মোডাল: হেডার সেকশনে চ্যাট ক্লিয়ার বাটন যুক্ত করা হয়েছে -->
+    <div id="admin-chat-modal" class="modal">
+        <div class="modal-content match-list-large-modal" style="display: flex; flex-direction: column; max-height: 85vh; padding: 15px;">
+            <span class="close-modal" onclick="closeModal('admin-chat-modal')">&times;</span>
+            <h3><i class="fa-solid fa-comments"></i> কাস্টমার লাইভ চ্যাট সাপোর্ট</h3>
+            
+            <div style="display: flex; flex: 1; min-height: 0; gap: 10px; margin-top: 5px;">
+                <div id="admin-chat-users-list" style="width: 35%; background: #0b0c10; border: 1px solid #2b3542; border-radius: 6px; overflow-y: auto; padding: 5px;">
+                    <p style="color:#666; font-size:11px; text-align:center; margin-top:20px;">কোনো চ্যাট নেই</p>
+                </div>
+                <div style="width: 65%; display: flex; flex-direction: column; background: #0b0c10; border: 1px solid #2b3542; border-radius: 6px; padding: 10px; position: relative;">
+                    <!-- হেডার রো যেটাতে ডিলিট বাটন বসানো হয়েছে -->
+                    <div id="active-chat-user-header" style="padding-bottom: 8px; border-bottom: 1px solid #2b3542; color:#45f3ff; font-size:12px; font-weight:bold; display: flex; justify-content: space-between; align-items: center;">
+                        <span>ইউজার সিলেক্ট করুন</span>
+                        <button id="btn-clear-chat-history" style="display: none; background: #e74c3c; color: #fff; border: none; padding: 3px 8px; font-size: 10px; border-radius: 4px; cursor: pointer; font-weight: bold;"><i class="fa-solid fa-trash-can"></i> Clear Chat</button>
+                    </div>
+                    <div id="admin-chat-messages-body" style="flex: 1; overflow-y: auto; padding: 10px 0; display: flex; flex-direction: column; gap: 8px;">
+                        <p style="color:#555; font-size:11px; text-align:center; margin-top:40px;">মেসেজ হিস্ট্রি দেখতে বাম থেকে কোনো ইউজারের উপর ক্লিক করুন।</p>
+                    </div>
+                    <div style="display: flex; gap: 6px; border-top: 1px solid #2b3542; padding-top: 8px;">
+                        <input type="text" id="admin-chat-input-text" placeholder="টাইপ করুন..." style="flex:1; padding: 8px; font-size:12px; background:#1f2833; border:1px solid #333; color:#fff; border-radius:4px;">
+                        <button id="btn-send-admin-chat" style="background:#e74c3c; color:#fff; border:none; padding:0 12px; border-radius:4px; font-size:12px; cursor:pointer; font-weight:bold;"><i class="fa-solid fa-paper-plane"></i></button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -176,7 +333,6 @@
 
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
-    
     <script src="admin-app.js"></script>
 </body>
 </html>
